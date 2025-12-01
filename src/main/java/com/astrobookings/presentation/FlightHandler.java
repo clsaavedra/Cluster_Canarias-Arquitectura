@@ -1,31 +1,107 @@
 package com.astrobookings.presentation;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.astrobookings.business.FlightService;
+import com.astrobookings.persistence.FlightRepository;
+import com.astrobookings.persistence.RocketRepository;
+import com.astrobookings.persistence.models.Flight;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 
-public class FlightHandler implements HttpHandler {
+public class FlightHandler extends BaseHandler {
+  private final FlightService flightService;
+  private final ObjectMapper objectMapper = new ObjectMapper();
+
+  public FlightHandler() {
+    FlightRepository flightRepository = new FlightRepository();
+    RocketRepository rocketRepository = new RocketRepository();
+    this.flightService = new FlightService(flightRepository, rocketRepository);
+  }
+
   @Override
   public void handle(HttpExchange exchange) throws IOException {
     String method = exchange.getRequestMethod();
-    String response = "";
 
     if ("GET".equals(method)) {
-      // TODO: List flights with status filter (JSON)
-      response = "[]"; // Placeholder
+      handleGet(exchange);
     } else if ("POST".equals(method)) {
-      // TODO: Create flight from JSON body
-      response = "{}"; // Placeholder
+      handlePost(exchange);
     } else {
-      exchange.sendResponseHeaders(405, -1);
-      return;
+      handleMethodNotAllowed(exchange);
+    }
+  }
+
+  private void handleGet(HttpExchange exchange) throws IOException {
+    String response = "";
+    int statusCode = 200;
+
+    try {
+      URI uri = exchange.getRequestURI();
+      String query = uri.getQuery();
+      String statusFilter = null;
+      if (query != null) {
+        Map<String, String> params = parseQuery(query);
+        statusFilter = params.get("status");
+      }
+
+      response = objectMapper.writeValueAsString(flightService.getFlights(statusFilter));
+    } catch (Exception e) {
+      statusCode = 500;
+      response = "{\"error\": \"Internal server error\"}";
     }
 
-    exchange.sendResponseHeaders(200, response.getBytes().length);
-    try (OutputStream os = exchange.getResponseBody()) {
-      os.write(response.getBytes());
+    sendResponse(exchange, statusCode, response);
+  }
+
+  private void handlePost(HttpExchange exchange) throws IOException {
+    String response = "";
+    int statusCode = 201;
+
+    try {
+      // Parse JSON body
+      InputStream is = exchange.getRequestBody();
+      String body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+      Flight flight = objectMapper.readValue(body, Flight.class);
+
+      Flight saved = flightService.createFlight(flight);
+      response = objectMapper.writeValueAsString(saved);
+    } catch (IllegalArgumentException e) {
+      String error = e.getMessage();
+      if (error.contains("does not exist")) {
+        statusCode = 404;
+      } else {
+        statusCode = 400;
+      }
+      response = "{\"error\": \"" + error + "\"}";
+    } catch (Exception e) {
+      statusCode = 400;
+      response = "{\"error\": \"Invalid JSON or request\"}";
     }
+
+    sendResponse(exchange, statusCode, response);
+  }
+
+  private void handleMethodNotAllowed(HttpExchange exchange) throws IOException {
+    sendResponse(exchange, 405, "{\"error\": \"Method not allowed\"}");
+  }
+
+  private Map<String, String> parseQuery(String query) {
+    Map<String, String> params = new HashMap<>();
+    if (query != null) {
+      String[] pairs = query.split("&");
+      for (String pair : pairs) {
+        String[] keyValue = pair.split("=");
+        if (keyValue.length == 2) {
+          params.put(keyValue[0], keyValue[1]);
+        }
+      }
+    }
+    return params;
   }
 }
