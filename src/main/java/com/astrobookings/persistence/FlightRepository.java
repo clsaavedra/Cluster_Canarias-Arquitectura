@@ -14,6 +14,22 @@ public class FlightRepository {
   private static final Map<String, Flight> flights = new HashMap<>();
   private static int nextId = 1;
 
+  static {
+    var rocketId = "00000000-0000-0000-0000-000000000001";
+    // Pre-load flights
+    var flight1Id = "10000000-0000-0000-0000-000000000001";
+    Flight flight1 = new Flight(flight1Id, rocketId, LocalDateTime.of(2026, 6, 1, 10, 0),
+        1000.0, FlightStatus.SCHEDULED, 5);
+    flights.put(flight1Id, flight1);
+
+    var flight2Id = "10000000-0000-0000-0000-000000000002";
+    Flight flight2 = new Flight(flight2Id, rocketId, LocalDateTime.of(2026, 12, 1, 10, 0),
+        2000.0, FlightStatus.CANCELLED, 5);
+    flights.put(flight2Id, flight2);
+
+    nextId = 3;
+  }
+
   public List<Flight> findAll() {
     LocalDateTime now = LocalDateTime.now();
     return flights.values().stream()

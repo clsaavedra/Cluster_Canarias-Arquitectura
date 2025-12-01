@@ -13,8 +13,9 @@ public class RocketRepository {
 
   static {
     // Pre-load one rocket
-    Rocket falcon9 = new Rocket("r1", "Falcon 9", 7, 27000.0);
-    rockets.put("r1", falcon9);
+    var rocketId = "00000000-0000-0000-0000-000000000001";
+    Rocket falcon9 = new Rocket(rocketId, "Falcon 9", 7, 27000.0);
+    rockets.put(rocketId, falcon9);
     nextId = 2;
   }
 
