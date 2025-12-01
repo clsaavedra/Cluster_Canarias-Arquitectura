@@ -31,23 +31,24 @@ public class CancellationService {
           List<Booking> bookings = bookingRepository.findByFlightId(flight.getId());
           if (bookings.size() < flight.getMinPassengers()) {
             // Cancel flight
-            System.out.println("[CANCELLATION SERVICE] Cancelling flight " + flight.getId());
+            System.out.println("[CANCELLATION SERVICE] Cancelling flight " + flight.getId() + " - Only "
+                + bookings.size() + "/5 passengers, departing in " + daysUntilDeparture + " days");
             flight.setStatus(FlightStatus.CANCELLED);
             flightRepository.save(flight);
 
             // Refund bookings
             for (Booking booking : bookings) {
-              PaymentGateway.processRefund(booking.getPaymentTransactionId());
+              PaymentGateway.processRefund(booking.getPaymentTransactionId(), booking.getFinalPrice());
             }
 
             // Notify
-            NotificationService.notifyCancellation(flight.getId(), bookings.size());
+            NotificationService.notifyCancellation(flight.getId(), bookings);
             cancelledCount++;
           }
         }
       }
     }
 
-    return "{\"cancelledFlights\": " + cancelledCount + "}";
+    return "{\"message\": \"Flight cancellation check completed\", \"cancelledFlights\": " + cancelledCount + "}";
   }
 }

@@ -16,4 +16,9 @@ public class PaymentGateway {
   public static void processRefund(String transactionId) {
     System.out.println("[PAYMENT GATEWAY] Processing refund for transaction: " + transactionId);
   }
+
+  public static void processRefund(String transactionId, double amount) {
+    System.out.println("[PAYMENT GATEWAY] Processing refund for transaction " + transactionId + ": $" + amount);
+    System.out.println("[PAYMENT GATEWAY] Refund successful for transaction " + transactionId);
+  }
 }
