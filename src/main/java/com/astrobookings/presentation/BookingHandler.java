@@ -12,12 +12,10 @@ import com.astrobookings.persistence.BookingRepository;
 import com.astrobookings.persistence.FlightRepository;
 import com.astrobookings.persistence.RocketRepository;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 
 public class BookingHandler extends BaseHandler {
   private final BookingService bookingService;
-  private final ObjectMapper objectMapper = new ObjectMapper();
 
   public BookingHandler() {
     BookingRepository bookingRepository = new BookingRepository();
@@ -35,7 +33,7 @@ public class BookingHandler extends BaseHandler {
     } else if ("POST".equals(method)) {
       handlePost(exchange);
     } else {
-      handleMethodNotAllowed(exchange);
+      this.handleMethodNotAllowed(exchange);
     }
   }
 
@@ -49,7 +47,7 @@ public class BookingHandler extends BaseHandler {
       String flightId = null;
       String passengerName = null;
       if (query != null) {
-        Map<String, String> params = parseQuery(query);
+        Map<String, String> params = this.parseQuery(query);
         flightId = params.get("flightId");
         passengerName = params.get("passengerName");
       }
@@ -71,7 +69,7 @@ public class BookingHandler extends BaseHandler {
       // Parse JSON body
       InputStream is = exchange.getRequestBody();
       String body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-      JsonNode jsonNode = objectMapper.readTree(body);
+      JsonNode jsonNode = this.objectMapper.readTree(body);
 
       String flightId = jsonNode.get("flightId").asText();
       String passengerName = jsonNode.get("passengerName").asText();
@@ -109,11 +107,7 @@ public class BookingHandler extends BaseHandler {
     sendResponse(exchange, statusCode, response);
   }
 
-  private void handleMethodNotAllowed(HttpExchange exchange) throws IOException {
-    sendResponse(exchange, 405, "{\"error\": \"Method not allowed\"}");
-  }
-
-  private Map<String, String> parseQuery(String query) {
+  protected Map<String, String> parseQuery(String query) {
     Map<String, String> params = new HashMap<>();
     if (query != null) {
       String[] pairs = query.split("&");

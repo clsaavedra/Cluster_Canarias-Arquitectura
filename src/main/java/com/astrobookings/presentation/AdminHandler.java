@@ -23,7 +23,7 @@ public class AdminHandler extends BaseHandler {
     if ("POST".equals(method)) {
       handlePost(exchange);
     } else {
-      handleMethodNotAllowed(exchange);
+      this.handleMethodNotAllowed(exchange);
     }
   }
 
@@ -39,9 +39,5 @@ public class AdminHandler extends BaseHandler {
     }
 
     sendResponse(exchange, statusCode, response);
-  }
-
-  private void handleMethodNotAllowed(HttpExchange exchange) throws IOException {
-    sendResponse(exchange, 405, "{\"error\": \"Method not allowed\"}");
   }
 }

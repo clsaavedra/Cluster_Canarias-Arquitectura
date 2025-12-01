@@ -6,12 +6,10 @@ import java.nio.charset.StandardCharsets;
 
 import com.astrobookings.persistence.RocketRepository;
 import com.astrobookings.persistence.models.Rocket;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 
 public class RocketHandler extends BaseHandler {
   private final RocketRepository rocketRepository = new RocketRepository();
-  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
   public void handle(HttpExchange exchange) throws IOException {
@@ -22,7 +20,7 @@ public class RocketHandler extends BaseHandler {
     } else if ("POST".equals(method)) {
       handlePost(exchange);
     } else {
-      handleMethodNotAllowed(exchange);
+      this.handleMethodNotAllowed(exchange);
     }
   }
 
@@ -31,7 +29,7 @@ public class RocketHandler extends BaseHandler {
     int statusCode = 200;
 
     try {
-      response = objectMapper.writeValueAsString(rocketRepository.findAll());
+      response = this.objectMapper.writeValueAsString(rocketRepository.findAll());
     } catch (Exception e) {
       statusCode = 500;
       response = "{\"error\": \"Internal server error\"}";
@@ -48,7 +46,7 @@ public class RocketHandler extends BaseHandler {
       // Parse JSON body
       InputStream is = exchange.getRequestBody();
       String body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-      Rocket rocket = objectMapper.readValue(body, Rocket.class);
+      Rocket rocket = this.objectMapper.readValue(body, Rocket.class);
 
       // Business validations mixed with input validation
       String error = validateRocket(rocket);
@@ -58,7 +56,7 @@ public class RocketHandler extends BaseHandler {
       } else {
         Rocket saved = rocketRepository.save(rocket);
         statusCode = 201;
-        response = objectMapper.writeValueAsString(saved);
+        response = this.objectMapper.writeValueAsString(saved);
       }
     } catch (Exception e) {
       statusCode = 400;
@@ -66,10 +64,6 @@ public class RocketHandler extends BaseHandler {
     }
 
     sendResponse(exchange, statusCode, response);
-  }
-
-  private void handleMethodNotAllowed(HttpExchange exchange) throws IOException {
-    sendResponse(exchange, 405, "{\"error\": \"Method not allowed\"}");
   }
 
   private String validateRocket(Rocket rocket) {
@@ -82,4 +76,5 @@ public class RocketHandler extends BaseHandler {
     // Speed is optional, no validation
     return null;
   }
+
 }

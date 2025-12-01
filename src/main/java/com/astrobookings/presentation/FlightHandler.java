@@ -11,12 +11,10 @@ import com.astrobookings.business.FlightService;
 import com.astrobookings.persistence.FlightRepository;
 import com.astrobookings.persistence.RocketRepository;
 import com.astrobookings.persistence.models.Flight;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 
 public class FlightHandler extends BaseHandler {
   private final FlightService flightService;
-  private final ObjectMapper objectMapper = new ObjectMapper();
 
   public FlightHandler() {
     FlightRepository flightRepository = new FlightRepository();
@@ -33,7 +31,7 @@ public class FlightHandler extends BaseHandler {
     } else if ("POST".equals(method)) {
       handlePost(exchange);
     } else {
-      handleMethodNotAllowed(exchange);
+      this.handleMethodNotAllowed(exchange);
     }
   }
 
@@ -46,11 +44,11 @@ public class FlightHandler extends BaseHandler {
       String query = uri.getQuery();
       String statusFilter = null;
       if (query != null) {
-        Map<String, String> params = parseQuery(query);
+        Map<String, String> params = this.parseQuery(query);
         statusFilter = params.get("status");
       }
 
-      response = objectMapper.writeValueAsString(flightService.getFlights(statusFilter));
+      response = this.objectMapper.writeValueAsString(flightService.getFlights(statusFilter));
     } catch (Exception e) {
       statusCode = 500;
       response = "{\"error\": \"Internal server error\"}";
@@ -67,10 +65,10 @@ public class FlightHandler extends BaseHandler {
       // Parse JSON body
       InputStream is = exchange.getRequestBody();
       String body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-      Flight flight = objectMapper.readValue(body, Flight.class);
+      Flight flight = this.objectMapper.readValue(body, Flight.class);
 
       Flight saved = flightService.createFlight(flight);
-      response = objectMapper.writeValueAsString(saved);
+      response = this.objectMapper.writeValueAsString(saved);
     } catch (IllegalArgumentException e) {
       String error = e.getMessage();
       if (error.contains("does not exist")) {
@@ -87,11 +85,7 @@ public class FlightHandler extends BaseHandler {
     sendResponse(exchange, statusCode, response);
   }
 
-  private void handleMethodNotAllowed(HttpExchange exchange) throws IOException {
-    sendResponse(exchange, 405, "{\"error\": \"Method not allowed\"}");
-  }
-
-  private Map<String, String> parseQuery(String query) {
+  protected Map<String, String> parseQuery(String query) {
     Map<String, String> params = new HashMap<>();
     if (query != null) {
       String[] pairs = query.split("&");
