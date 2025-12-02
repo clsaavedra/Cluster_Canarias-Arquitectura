@@ -3,14 +3,14 @@ package com.astrobookings.presentation;
 import java.io.IOException;
 
 import com.astrobookings.domain.CancellationService;
-import com.astrobookings.infrastructure.RepositoryFactoryInMemory;
+import com.astrobookings.infrastructure.RepositoryFactory;
 import com.sun.net.httpserver.HttpExchange;
 
 public class AdminHandler extends BaseHandler {
   private final CancellationService cancellationService;
 
   public AdminHandler() {
-    this.cancellationService = new CancellationService(RepositoryFactoryInMemory.getFlightInstance(), RepositoryFactoryInMemory.getBookingInstance());
+    this.cancellationService = new CancellationService(RepositoryFactory.getFlightInstance(), RepositoryFactory.getBookingInstance());
   }
 
   @Override

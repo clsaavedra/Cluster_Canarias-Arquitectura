@@ -6,11 +6,11 @@ import java.nio.charset.StandardCharsets;
 
 import com.astrobookings.domain.model.Rocket;
 import com.astrobookings.domain.ports.RocketRepositoryPort;
-import com.astrobookings.infrastructure.RepositoryFactoryInMemory;
+import com.astrobookings.infrastructure.RepositoryFactory;
 import com.sun.net.httpserver.HttpExchange;
 
 public class RocketHandler extends BaseHandler {
-  private final RocketRepositoryPort rocketRepository = RepositoryFactoryInMemory.getRocketInstance();
+  private final RocketRepositoryPort rocketRepository = RepositoryFactory.getRocketInstance();
 
   @Override
   public void handle(HttpExchange exchange) throws IOException {
