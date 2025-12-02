@@ -11,7 +11,7 @@ import com.astrobookings.domain.BookingService;
 import com.astrobookings.domain.ports.BookingRepositoryPort;
 import com.astrobookings.domain.ports.FlightRepositoryPort;
 import com.astrobookings.domain.ports.RocketRepositoryPort;
-import com.astrobookings.infrastructure.RepositoryFactory;
+import com.astrobookings.infrastructure.RepositoryFactoryInMemory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -19,9 +19,9 @@ public class BookingHandler extends BaseHandler {
   private final BookingService bookingService;
 
   public BookingHandler() {
-    BookingRepositoryPort bookingRepository = RepositoryFactory.getBookingInstance();
-    FlightRepositoryPort flightRepository = RepositoryFactory.getFlightInstance();
-    RocketRepositoryPort rocketRepository = RepositoryFactory.getRocketInstance();
+    BookingRepositoryPort bookingRepository = RepositoryFactoryInMemory.getBookingInstance();
+    FlightRepositoryPort flightRepository = RepositoryFactoryInMemory.getFlightInstance();
+    RocketRepositoryPort rocketRepository = RepositoryFactoryInMemory.getRocketInstance();
     this.bookingService = new BookingService(bookingRepository, flightRepository, rocketRepository);
   }
 

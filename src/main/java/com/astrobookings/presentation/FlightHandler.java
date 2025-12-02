@@ -11,15 +11,15 @@ import com.astrobookings.domain.FlightService;
 import com.astrobookings.domain.model.Flight;
 import com.astrobookings.domain.ports.FlightRepositoryPort;
 import com.astrobookings.domain.ports.RocketRepositoryPort;
-import com.astrobookings.infrastructure.RepositoryFactory;
+import com.astrobookings.infrastructure.RepositoryFactoryInMemory;
 import com.sun.net.httpserver.HttpExchange;
 
 public class FlightHandler extends BaseHandler {
   private final FlightService flightService;
 
   public FlightHandler() {
-    FlightRepositoryPort flightRepository = RepositoryFactory.getFlightInstance();
-    RocketRepositoryPort rocketRepository = RepositoryFactory.getRocketInstance();
+    FlightRepositoryPort flightRepository = RepositoryFactoryInMemory.getFlightInstance();
+    RocketRepositoryPort rocketRepository = RepositoryFactoryInMemory.getRocketInstance();
     this.flightService = new FlightService(flightRepository, rocketRepository);
   }
 

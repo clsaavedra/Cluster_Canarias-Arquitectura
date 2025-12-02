@@ -8,7 +8,7 @@ import java.util.Map;
 import com.astrobookings.domain.model.Rocket;
 import com.astrobookings.domain.ports.RocketRepositoryPort;
 
-public class RocketAdapterRepository implements RocketRepositoryPort {
+public class RocketAdapterRepositoryInMemory implements RocketRepositoryPort {
   private static final Map<String, Rocket> rockets = new HashMap<>();
   private static int nextId = 1;
 

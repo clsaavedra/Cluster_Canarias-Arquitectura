@@ -4,10 +4,10 @@ import com.astrobookings.domain.ports.BookingRepositoryPort;
 import com.astrobookings.domain.ports.FlightRepositoryPort;
 import com.astrobookings.domain.ports.RocketRepositoryPort;
 
-public class RepositoryFactory {
+public class RepositoryFactoryInMemory {
     private static BookingRepositoryPort bookinRepositoryInstance = new BookingAdapterReposioryInMemory();
-    private static FlightRepositoryPort flightRepositoryInstance = new FlightAdapterRepository();
-    private static RocketRepositoryPort rocketRepositoryInstance = new RocketAdapterRepository();
+    private static FlightRepositoryPort flightRepositoryInstance = new FlightAdapterRepositoryInMemory();
+    private static RocketRepositoryPort rocketRepositoryInstance = new RocketAdapterRepositoryInMemory();
 
     public static BookingRepositoryPort getBookingInstance() {
         return bookinRepositoryInstance;

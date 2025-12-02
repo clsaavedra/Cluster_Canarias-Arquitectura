@@ -11,7 +11,7 @@ import com.astrobookings.domain.model.Flight;
 import com.astrobookings.domain.model.FlightStatus;
 import com.astrobookings.domain.ports.FlightRepositoryPort;
 
-public class FlightAdapterRepository implements FlightRepositoryPort {
+public class FlightAdapterRepositoryInMemory implements FlightRepositoryPort {
   private static final Map<String, Flight> flights = new HashMap<>();
   private static int nextId = 1;
 
