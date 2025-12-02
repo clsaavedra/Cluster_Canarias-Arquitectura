@@ -2,4 +2,8 @@
   "markdown.marp.themes": [
     "/docs/ab.css"
   ],
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "cSpell.words": [
+    "httpserver"
+  ]
 }
