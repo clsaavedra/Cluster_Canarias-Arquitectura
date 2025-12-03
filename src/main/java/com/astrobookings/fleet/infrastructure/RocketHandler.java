@@ -1,16 +1,17 @@
-package com.astrobookings.presentation;
+package com.astrobookings.fleet.infrastructure;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import com.astrobookings.domain.model.Rocket;
-import com.astrobookings.domain.ports.RocketRepositoryPort;
-import com.astrobookings.infrastructure.RepositoryFactory;
+import com.astrobookings.fleet.FleetFactory;
+import com.astrobookings.fleet.domain.model.Rocket;
+import com.astrobookings.fleet.domain.ports.RocketRepositoryPort;
+import com.astrobookings.share.BaseHandler;
 import com.sun.net.httpserver.HttpExchange;
 
 public class RocketHandler extends BaseHandler {
-  private final RocketRepositoryPort rocketRepository = RepositoryFactory.getRocketInstance();
+  private final RocketRepositoryPort rocketRepository = FleetFactory.getRocketInstance();
 
   @Override
   public void handle(HttpExchange exchange) throws IOException {

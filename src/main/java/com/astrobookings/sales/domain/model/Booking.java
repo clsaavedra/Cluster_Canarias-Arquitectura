@@ -1,4 +1,4 @@
-package com.astrobookings.domain.model;
+package com.astrobookings.sales.domain.model;
 
 public class Booking {
   private String id;

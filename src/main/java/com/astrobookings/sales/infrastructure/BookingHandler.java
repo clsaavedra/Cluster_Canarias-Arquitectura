@@ -1,4 +1,4 @@
-package com.astrobookings.presentation;
+package com.astrobookings.sales.infrastructure;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,11 +7,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.astrobookings.domain.BookingService;
-import com.astrobookings.domain.ports.BookingRepositoryPort;
-import com.astrobookings.domain.ports.FlightRepositoryPort;
-import com.astrobookings.domain.ports.RocketRepositoryPort;
-import com.astrobookings.infrastructure.RepositoryFactory;
+import com.astrobookings.fleet.FleetFactory;
+import com.astrobookings.fleet.domain.ports.FlightRepositoryPort;
+import com.astrobookings.fleet.domain.ports.RocketRepositoryPort;
+import com.astrobookings.sales.SalesFactory;
+import com.astrobookings.sales.domain.BookingService;
+import com.astrobookings.sales.domain.ports.BookingRepositoryPort;
+import com.astrobookings.share.BaseHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -19,9 +21,9 @@ public class BookingHandler extends BaseHandler {
   private final BookingService bookingService;
 
   public BookingHandler() {
-    BookingRepositoryPort bookingRepository = RepositoryFactory.getBookingInstance();
-    FlightRepositoryPort flightRepository = RepositoryFactory.getFlightInstance();
-    RocketRepositoryPort rocketRepository = RepositoryFactory.getRocketInstance();
+    BookingRepositoryPort bookingRepository = SalesFactory.getBookingInstance();
+    FlightRepositoryPort flightRepository = FleetFactory.getFlightInstance();
+    RocketRepositoryPort rocketRepository = FleetFactory.getRocketInstance();
     this.bookingService = new BookingService(bookingRepository, flightRepository, rocketRepository);
   }
 

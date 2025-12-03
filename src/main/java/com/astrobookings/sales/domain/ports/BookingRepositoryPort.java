@@ -1,8 +1,8 @@
-package com.astrobookings.domain.ports;
+package com.astrobookings.sales.domain.ports;
 
 import java.util.List;
 
-import com.astrobookings.domain.model.Booking;
+import com.astrobookings.sales.domain.model.Booking;
 
 public interface BookingRepositoryPort {
     List<Booking> findAll();

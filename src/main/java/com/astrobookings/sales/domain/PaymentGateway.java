@@ -1,4 +1,4 @@
-package com.astrobookings.domain;
+package com.astrobookings.sales.domain;
 
 import java.util.UUID;
 

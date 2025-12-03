@@ -1,4 +1,4 @@
-package com.astrobookings.domain.model;
+package com.astrobookings.fleet.domain.model;
 
 import java.time.LocalDateTime;
 

@@ -1,8 +1,8 @@
-package com.astrobookings.domain;
+package com.astrobookings.sales;
 
 import java.util.List;
 
-import com.astrobookings.domain.model.Booking;
+import com.astrobookings.sales.domain.model.Booking;
 
 public class NotificationService {
   public static void notifyConfirmation(String flightId, int passengerCount) {

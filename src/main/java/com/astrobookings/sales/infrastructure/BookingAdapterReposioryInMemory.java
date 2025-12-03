@@ -1,4 +1,4 @@
-package com.astrobookings.infrastructure;
+package com.astrobookings.sales.infrastructure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.astrobookings.domain.model.Booking;
-import com.astrobookings.domain.ports.BookingRepositoryPort;
+import com.astrobookings.sales.domain.model.Booking;
+import com.astrobookings.sales.domain.ports.BookingRepositoryPort;
 
 public class BookingAdapterReposioryInMemory implements BookingRepositoryPort {
   private static final Map<String, Booking> bookings = new HashMap<>();

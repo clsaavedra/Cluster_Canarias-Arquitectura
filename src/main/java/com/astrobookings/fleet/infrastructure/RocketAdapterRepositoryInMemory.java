@@ -1,12 +1,12 @@
-package com.astrobookings.infrastructure;
+package com.astrobookings.fleet.infrastructure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.astrobookings.domain.model.Rocket;
-import com.astrobookings.domain.ports.RocketRepositoryPort;
+import com.astrobookings.fleet.domain.model.Rocket;
+import com.astrobookings.fleet.domain.ports.RocketRepositoryPort;
 
 public class RocketAdapterRepositoryInMemory implements RocketRepositoryPort {
   private static final Map<String, Rocket> rockets = new HashMap<>();

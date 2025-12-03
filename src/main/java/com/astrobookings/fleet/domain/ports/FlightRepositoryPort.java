@@ -1,8 +1,8 @@
-package com.astrobookings.domain.ports;
+package com.astrobookings.fleet.domain.ports;
 
 import java.util.List;
 
-import com.astrobookings.domain.model.Flight;
+import com.astrobookings.fleet.domain.model.Flight;
 
 public interface FlightRepositoryPort {
 
